@@ -1,42 +1,57 @@
-import React, { useState } from 'react';
-import { Text, View, TextInput, Button, StyleSheet,Pressable } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, StyleSheet, Animated, Image, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 
-const BeginScreen =({navigation})=>{
-  const handlePress=()=>{
-    navigation.navigate('AccountName');
+const BeginScreen = () => {
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value of 0
+  const navigation = useNavigation(); // Use navigation hook
+
+  useEffect(() => {
+    // Start the fade-in animation
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 2000, // Duration of the fade-in effect
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
+  const handleStartPress = () => {
+    navigation.navigate('AccountName'); // Navigate to HomeTabs (Home screen)
   };
+
   return (
     <View style={styles.container}>
-    <Text style={styles.emoji}> 💰 </Text>
-    <Pressable style={styles.button} onPress={handlePress}>
-    <Text style={styles.buttonText}> Start to manage your money </Text>
-    </Pressable>
+      <Animated.Image
+        source={require('../assets/logo.jpg')} // Path to your image
+        style={[styles.logo, { opacity: fadeAnim }]} // Apply animated opacity
+      />
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Start to Manage Your Money"
+          onPress={handleStartPress}
+          color="#6495ed" // Customize the button color
+        />
+      </View>
     </View>
   );
 };
 
-const styles=StyleSheet.create({
-  container:{
-    flex:1 ,
-    justifyContent:'center',
-    alignItems:'center',
-    backgroundColor:'#fff',
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
-  emoji:{
-    fontSize:200,
-    marginBottom:70,
+  logo: {
+    width: 200, // Adjust width as needed
+    height: 200, // Adjust height as needed
+    marginBottom: 30,
   },
-  button:{
-    backgroundColor:'#deb887',
-    paddingVertical:15,
-    paddingHorizontal:30,
-    borderRadius:10,
+  buttonContainer: {
+    marginTop: 50, // Space between the image and button
+    width: '80%', // Adjust the width to fit your design
   },
-  buttonText:{
-    color:'#fff',
-    fontsize:20,
-    fontWeight:'bold',
-  }
 });
+
 export default BeginScreen;
-      

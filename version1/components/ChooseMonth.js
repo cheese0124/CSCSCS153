@@ -51,6 +51,7 @@ const SelectMonthPage = () => {
           </Pressable>
         ))}
       </View>
+
       <Text style={styles.subtitle}>Select Month:</Text>
       <View style={styles.monthContainer}>
         {months.map(month => (

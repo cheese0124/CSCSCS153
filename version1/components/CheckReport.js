@@ -5,13 +5,15 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const CheckReportPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Pressable style={styles.backArrow} onPress={() => navigation.goBack()}>
+      <Pressable style={styles.backArrow} 
+      onPress={() => navigation.goBack()}>
         <Icon name="arrow-back" size={24} color="#32CD32" />
       </Pressable>
       <Text style={styles.title}>Check Your Report</Text>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Expense</Text>
-        <Pressable style={[styles.button, styles.expenseButton]} onPress={() => navigation.navigate('SelectMonthPage')}>
+        <Pressable style={[styles.button, styles.expenseButton]} 
+                  onPress={() => navigation.navigate('SelectMonthPage')}>
           <Text style={styles.buttonText}>Monthly Report</Text>
         </Pressable>
         <Pressable style={[styles.button, styles.expenseButton]} onPress={() => navigation.navigate('YearlyExpenseReport')}>
