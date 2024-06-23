@@ -1,35 +1,50 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Image, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BeginScreen = () => {
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial opacity value of 0
-  const navigation = useNavigation(); // Use navigation hook
+const AnimatedBeginScreen = () => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation();
 
   useEffect(() => {
-    // Start the fade-in animation
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 2000, // Duration of the fade-in effect
+      duration: 2000,
       useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
 
-  const handleStartPress = () => {
-    navigation.navigate('AccountName'); // Navigate to HomeTabs (Home screen)
+  const handleStartPress = async () => {
+    try {
+      const accountName = await AsyncStorage.getItem('accountName');
+      if (accountName) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Main' }],
+        });
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'AccountName' }],
+        });
+      }
+    } catch (error) {
+      console.error('Failed to check account name in storage', error);
+    }
   };
 
   return (
     <View style={styles.container}>
       <Animated.Image
-        source={require('../assets/logo.jpg')} // Path to your image
-        style={[styles.logo, { opacity: fadeAnim }]} // Apply animated opacity
+        source={require('../assets/logo.jpg')}
+        style={[styles.logo, { opacity: fadeAnim }]}
       />
       <View style={styles.buttonContainer}>
         <Button
           title="Start to Manage Your Money"
           onPress={handleStartPress}
-          color="#6495ed" // Customize the button color
+          color="#6495ed"
         />
       </View>
     </View>
@@ -44,14 +59,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   logo: {
-    width: 200, // Adjust width as needed
-    height: 200, // Adjust height as needed
-    marginBottom: 30,
+    width: 200,
+    height: 200,
+    marginBottom: 20,
   },
   buttonContainer: {
-    marginTop: 50, // Space between the image and button
-    width: '80%', // Adjust the width to fit your design
+    marginTop: 20,
+    width: '80%',
   },
 });
 
-export default BeginScreen;
+export default AnimatedBeginScreen;

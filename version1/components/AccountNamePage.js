@@ -1,62 +1,42 @@
-import React, {useState} from 'react';
-import {View, Text, TextInput, Pressable, StyleSheet} from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { AccountContext } from './AccountContext'; // Import AccountContext
 
-const AccountNamePage=({navigation})=>{
-  const [accountName, setAccountName]=useState('');
+const AccountNamePage = ({ navigation }) => {
+  const [inputName, setInputName] = useState('');
+  const { setAccountName } = useContext(AccountContext); // Use context
 
-  const handleFinish=()=>{
-    navigation.replace('Main', {screen: 'Home'});
+  const handleSave = () => {
+    setAccountName(inputName); // Set the account name in context
+    navigation.navigate('Main'); // Navigate to the main screen
   };
+
   return (
     <View style={styles.container}>
-    <Text style={styles.title}> Enter your account name </Text>
-    <TextInput
-    style={styles.input}
-    placeholder="Account Name"
-    value={accountName}
-    onChangeText={setAccountName}
-    />
-    <Pressable style={styles.button} onPress={handleFinish}>
-    <Text style={styles.buttonText}> Finish </Text>
-    </Pressable>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your account name"
+        value={inputName}
+        onChangeText={setInputName}
+      />
+      <Button title="Save" onPress={handleSave} />
     </View>
   );
 };
 
-const styles=StyleSheet.create({
-  container:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center',
-    padding:20,
-    backgroundColor:'#fff',
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
-  title:{
-    fontSize:24,
-    marginBottom:20,
-  },
-  input:{
-    width:'100%',
-    height:40,
-    borderColor:'gray',
-    borderwidth:1,
-    paddingHorizontal:10,
-    marginBottom:20,
-    borderRadius:5,
-  },
-  button:{
-    position:'absolute',
-    bottom:20,
-    left:20,
-    backgroundColor:'#007BFF',
-    paddingVertical:15,
-    paddingHorizontal:30,
-    borderRadius:5,
-  },
-  buttonText:{
-    color:'#fff',
-    fontSize:18,
-    fontWeight:'bold',
+  input: {
+    width: '100%',
+    padding: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 20,
   },
 });
 
