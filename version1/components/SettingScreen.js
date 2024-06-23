@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { View, Text, Pressable, StyleSheet, Alert } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, Image, Pressable, StyleSheet, Alert } from 'react-native';
 import { AccountContext } from './AccountContext';
 import { ValueContext } from './ValueContext';
 import { useNavigation } from '@react-navigation/native';
@@ -7,19 +7,36 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingScreen = () => {
   const { accountName, setAccountName } = useContext(AccountContext);
-  const { setExpenses } = useContext(ValueContext); // Get setExpenses from ValueContext
+  const { setExpenses } = useContext(ValueContext);
+  const [photoUri, setPhotoUri] = useState(null);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const loadProfilePhoto = async () => {
+      try {
+        const uri = await AsyncStorage.getItem('profilePhoto');
+        if (uri) {
+          setPhotoUri(uri);
+        }
+      } catch (error) {
+        console.error('Failed to load profile photo from storage', error);
+      }
+    };
+
+    loadProfilePhoto();
+  }, []);
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.clear(); // Clear all local storage
-      setAccountName(''); // Reset account name in context
-      setExpenses([]); // Reset expenses in context
+      await AsyncStorage.clear();
+      setAccountName('');
+      setExpenses([]);
+      setPhotoUri(null);
       Alert.alert("Logged Out", "You have been logged out.");
       navigation.reset({
         index: 0,
         routes: [{ name: 'AnimatedBegin' }],
-      }); // Navigate to the begin screen
+      });
     } catch (error) {
       console.error('Failed to log out and clear storage', error);
     }
@@ -27,6 +44,7 @@ const SettingScreen = () => {
 
   return (
     <View style={styles.container}>
+      {photoUri && <Image source={{ uri: photoUri }} style={styles.profileImage} />}
       <View style={styles.welcomeContainer}>
         <Text style={styles.welcomeText}>Welcome, {accountName}!</Text>
       </View>
@@ -47,7 +65,6 @@ const SettingScreen = () => {
         <Text style={styles.buttonText}>Clear All My Data</Text>
       </Pressable>
 
-      {/* Log Out Button */}
       <Pressable style={[styles.button, styles.logoutButton]} onPress={handleLogout}>
         <Text style={styles.buttonText}>Log Out</Text>
       </Pressable>
@@ -62,6 +79,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     backgroundColor: '#fff',
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
   },
   welcomeContainer: {
     marginBottom: 20,

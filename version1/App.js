@@ -17,8 +17,8 @@ import CheckReportPage from './components/CheckReport';
 import CheckGardenPage from './components/CheckGarden';
 import SelectMonthPage from './components/ChooseMonth';
 import MonthlyExpenseReport from './components/MonthlyExpenseReport';
-import AnimatedBeginScreen from './components/BeginScreen'; // Add AnimatedBeginScreen
-import TotalExpenseReport from './components/TotalExpenseReport'; // Add TotalExpenseReport
+import AnimatedBeginScreen from './components/BeginScreen';
+import TotalExpenseReport from './components/TotalExpenseReport';
 
 // Import Context Providers
 import { AccountProvider } from './components/AccountContext';
