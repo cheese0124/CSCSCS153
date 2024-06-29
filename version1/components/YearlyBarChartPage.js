@@ -8,11 +8,11 @@ import { useRoute, useNavigation } from '@react-navigation/native'; // Import us
 
 const screenWidth = Dimensions.get('window').width;
 
-const BarChartPage = () => {
+const YearlyBarChartPage = () => {
   const { expenses } = useContext(ValueContext);
   const route = useRoute();
   const navigation = useNavigation();
-  const { year, month } = route.params; // Get year and month from route parameters
+  const { year } = route.params; // Get year from route parameters
 
   // Function to get the total expenses for a given month and year
   const getTotalExpenses = (year, month) => {
@@ -24,38 +24,28 @@ const BarChartPage = () => {
       .reduce((acc, expense) => acc + expense.amount, 0);
   };
 
-  // Calculate expenses for the selected month, previous month, and next month
-  const currentTotal = getTotalExpenses(year, month);
-  const previousMonth = month === 1 ? 12 : month - 1;
-  const previousYear = month === 1 ? year - 1 : year;
-  const nextMonth = month === 12 ? 1 : month + 1;
-  const nextYear = month === 12 ? year + 1 : year;
-  const previousTotal = getTotalExpenses(previousYear, previousMonth);
-  const nextTotal = getTotalExpenses(nextYear, nextMonth);
+  // Calculate expenses for each month of the selected year
+  const monthlyExpenses = [];
+  for (let month = 1; month <= 12; month++) {
+    monthlyExpenses.push(getTotalExpenses(year, month));
+  }
 
   // Prepare data for bar chart
   const barData = {
-    labels: [
-      `${previousYear}-${previousMonth < 10 ? '0' + previousMonth : previousMonth}`,
-      `${year}-${month < 10 ? '0' + month : month}`,
-      `${nextYear}-${nextMonth < 10 ? '0' + nextMonth : nextMonth}`
-    ],
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [{
-      data: [previousTotal, currentTotal, nextTotal],
+      data: monthlyExpenses,
     }],
   };
-
-  // Determine the comparison text
-  const comparisonText = previousTotal !== 0 ? `You have spent ${currentTotal - previousTotal >= 0 ? '$' + (currentTotal - previousTotal) + ' more' : '$' + (previousTotal - currentTotal) + ' less'} than last month.` : '';
 
   return (
     <View style={styles.container}>
       <Pressable style={styles.backArrow} onPress={() => navigation.goBack()}>
         <Icon name="arrow-back" size={24} color="#007BFF" />
       </Pressable>
-      <Text style={styles.title}>Monthly Expense Report - {month}/{year}</Text>
+      <Text style={styles.title}>Yearly Expense Report - {year}</Text>
       <View style={styles.chartContainer}>
-        <Text style={styles.chartTitle}>Month-to-Month Comparison</Text>
+        <Text style={styles.chartTitle}>Monthly Expenses</Text>
         <BarChart
           data={barData}
           width={screenWidth - 40}
@@ -64,11 +54,7 @@ const BarChartPage = () => {
           chartConfig={chartConfig}
           verticalLabelRotation={30}
         />
-        <Text style={styles.comparisonText}>{comparisonText}</Text>
       </View>
-      <Pressable style={styles.doneButton} onPress={() => navigation.navigate('SuggestionsPage')}>
-        <Text style={styles.doneButtonText}>Done</Text>
-      </Pressable>
     </View>
   );
 };
@@ -107,24 +93,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
-  comparisonText: {
-    fontSize: 16,
-    marginTop: 10,
-    textAlign: 'center',
-  },
-  doneButton: {
-    backgroundColor: '#007BFF',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  doneButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
 });
 
-export default BarChartPage;
+export default YearlyBarChartPage;

@@ -1,22 +1,22 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'; 
+import Icon from 'react-native-vector-icons/Ionicons'; // Import Icon
 
 const CheckReportPage = ({ navigation }) => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <View style={styles.container}>
-      <Pressable style={styles.backArrow} 
-      onPress={() => navigation.goBack()}>
+      <Pressable style={styles.backArrow} onPress={() => navigation.goBack()}>
         <Icon name="arrow-back" size={24} color="#32CD32" />
       </Pressable>
       <Text style={styles.title}>Check Your Report</Text>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Expense</Text>
-        <Pressable style={[styles.button, styles.expenseButton]} 
-                  onPress={() => navigation.navigate('SelectMonthPage')}>
+        <Pressable style={[styles.button, styles.expenseButton]} onPress={() => navigation.navigate('SelectMonthPage')}>
           <Text style={styles.buttonText}>Monthly Report</Text>
         </Pressable>
-        <Pressable style={[styles.button, styles.expenseButton]} onPress={() => navigation.navigate('YearlyExpenseReport')}>
+        <Pressable style={[styles.button, styles.expenseButton]} onPress={() => navigation.navigate('YearlyPieChartPage', { year: currentYear })}>
           <Text style={styles.buttonText}>Yearly Report</Text>
         </Pressable>
       </View>
@@ -31,7 +31,9 @@ const CheckReportPage = ({ navigation }) => {
       </View>
     </View>
   );
-};const styles = StyleSheet.create({
+};
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
@@ -63,16 +65,17 @@ const CheckReportPage = ({ navigation }) => {
     alignItems: 'center',
     width: '100%',
   },
-  expenseButton: { backgroundColor: '#FF6347', 
-},
-savingButton: {
-  backgroundColor: '#4682B4', 
-},
-buttonText: {
-  color: '#fff',
-  fontSize: 18,
-  fontWeight: 'bold',
-},
+  expenseButton: {
+    backgroundColor: '#FF6347',
+  },
+  savingButton: {
+    backgroundColor: '#4682B4',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });
 
 export default CheckReportPage;

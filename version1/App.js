@@ -21,7 +21,9 @@ import BarChartPage from './components/BarChartPage';
 import TagSelectionPage from './components/TagSelectionPage';
 import CustomTagPage from './components/CustomTagPage';
 import TotalExpenseReport from './components/TotalExpenseReport'; // Add TotalExpenseReport
-
+import YearlyBarChartPage from './components/YearlyBarChartPage';
+import YearlyPieChartPage from './components/YearlyPieChartPage';
+import SavingsSuggestionsPage from './components/SavingsSuggestionsPage';
 // Import Context Providers
 import { AccountProvider } from './components/AccountContext';
 import { ValueProvider } from './components/ValueContext';
@@ -148,10 +150,29 @@ function App() {
               component={BarChartPage}
               options={{ headerShown: false }}
             />
-      
+      <Stack.Screen
+              name="YearlyBarChartPage"
+              component={YearlyBarChartPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="YearlyPieChartPage"
+              component={YearlyPieChartPage}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="TotalExpense"
               component={TotalExpenseReport}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="RecordSavingsPage"
+              component={RecordSavingsPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SavingsSuggestionsPage"
+              component={SavingsSuggestionsPage}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
