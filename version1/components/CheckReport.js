@@ -31,9 +31,7 @@ const CheckReportPage = ({ navigation }) => {
       </View>
     </View>
   );
-};
-
-const styles = StyleSheet.create({
+};const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
@@ -65,17 +63,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
-  expenseButton: {
-    backgroundColor: '#FF6347', 
-  },
-  savingButton: {
-    backgroundColor: '#4682B4', 
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+  expenseButton: { backgroundColor: '#FF6347', 
+},
+savingButton: {
+  backgroundColor: '#4682B4', 
+},
+buttonText: {
+  color: '#fff',
+  fontSize: 18,
+  fontWeight: 'bold',
+},
 });
 
 export default CheckReportPage;

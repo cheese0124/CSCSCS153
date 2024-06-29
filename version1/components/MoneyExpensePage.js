@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, Pressable, TextInput, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; // Import Icon
 import { useValue } from '../components/ValueContext'; // Import useValue
+import { TagContext } from '../components/TagContext'; // Import TagContext
 
 const RecordExpensePage = ({ navigation }) => {
-  const [tag, setTag] = useState('');
   const [date, setDate] = useState('');
   const [amount, setAmount] = useState('');
   const { addExpense } = useValue();
+  const { selectedTag } = useContext(TagContext); // Use selectedTag from context
 
   const handleAddExpense = () => {
     const parsedAmount = parseFloat(amount);
     if (!isNaN(parsedAmount)) {
-      addExpense({ tag, date, amount: parsedAmount });
-      setTag('');
+      addExpense({ tag: selectedTag, date, amount: parsedAmount });
       setDate('');
       setAmount('');
     }
@@ -43,7 +43,9 @@ const RecordExpensePage = ({ navigation }) => {
       </Pressable>
       <Text style={styles.title}>Record Expense</Text>
       <Text>Select a tag:</Text>
-      <TextInput style={styles.input} placeholder="Tag" value={tag} onChangeText={setTag} />
+      <Pressable style={styles.tagButton} onPress={() => navigation.navigate('TagSelectionPage')}>
+        <Text style={styles.tagButtonText}>{selectedTag || 'Tap to select a tag'}</Text>
+      </Pressable>
       <Text>Enter the date:</Text>
       <TextInput
         style={styles.input}
@@ -64,7 +66,7 @@ const RecordExpensePage = ({ navigation }) => {
       <Pressable style={styles.button} onPress={handleAddExpense}>
         <Text style={styles.buttonText}>Add Expense</Text>
       </Pressable>
-      <Pressable style={styles.button} onPress={() => { setTag(''); setDate(''); setAmount(''); }}>
+      <Pressable style={styles.button} onPress={() => { setDate(''); setAmount(''); }}>
         <Text style={styles.buttonText}>Clear</Text>
       </Pressable>
     </View>
@@ -106,6 +108,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  tagButton: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    marginVertical: 8,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  tagButtonText: {
+    fontSize: 16,
   },
 });
 
