@@ -1,101 +1,96 @@
-import React, { useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Animated } from 'react-native';
-import { BarChart } from 'react-native-chart-kit'; // Ensure this package is installed
+// BarChartPage.js
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { BarChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import { ValueContext } from '../components/ValueContext'; // Import ValueContext
+import Icon from 'react-native-vector-icons/Ionicons'; // Import Icon
+import { useRoute, useNavigation } from '@react-navigation/native'; // Import useRoute and useNavigation
 
 const screenWidth = Dimensions.get('window').width;
 
-const BarChartPage = ({ navigation, route }) => {
-  const { year, month, expenses } = route.params;
-  const fadeAnim = new Animated.Value(0);  // Initial value for opacity: 0
+const BarChartPage = () => {
+  const { expenses } = useContext(ValueContext);
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { year, month } = route.params; // Get year and month from route parameters
 
-  useEffect(() => {
-    Animated.timing(
-      fadeAnim,
-      {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }
-    ).start();
-  }, [fadeAnim]);
+  // Filter expenses by the selected month and year
+  const filteredExpenses = expenses.filter(expense => {
+    const expenseDate = new Date(expense.date);
+    return expenseDate.getFullYear() === year && (expenseDate.getMonth() + 1) === month;
+  });
 
-  const getMonthData = (year, month) => {
-    return expenses.filter(expense => {
-      const expenseDate = new Date(expense.date);
-      return expenseDate.getFullYear() === year && expenseDate.getMonth() + 1 === month;
-    });
-  };
+  // Group filtered expenses by tag and calculate totals
+  const groupedExpenses = filteredExpenses.reduce((acc, expense) => {
+    const { tag, amount } = expense;
+    if (!acc[tag]) {
+      acc[tag] = 0;
+    }
+    acc[tag] += amount;
+    return acc;
+  }, {});
 
-  const currentMonthData = getMonthData(year, month);
-  const previousMonthDate = new Date(year, month - 2); // previous month
-  const previousMonthData = getMonthData(previousMonthDate.getFullYear(), previousMonthDate.getMonth() + 1);
-  const nextMonthDate = new Date(year, month); // next month
-  const nextMonthData = getMonthData(nextMonthDate.getFullYear(), nextMonthDate.getMonth() + 1);
-
-  const totalCurrentMonth = currentMonthData.reduce((sum, expense) => sum + expense.amount, 0);
-  const totalPreviousMonth = previousMonthData.reduce((sum, expense) => sum + expense.amount, 0);
-  const totalNextMonth = nextMonthData.reduce((sum, expense) => sum + expense.amount, 0);
-
-  const data = {
-    labels: ['Previous Month', 'Current Month', 'Next Month'],
-    datasets: [
-      {
-        data: [
-          totalPreviousMonth,
-          totalCurrentMonth,
-          totalNextMonth,
-        ],
-      },
-    ],
+  // Prepare data for bar chart
+  const barData = {
+    labels: Object.keys(groupedExpenses),
+    datasets: [{
+      data: Object.values(groupedExpenses),
+    }],
   };
 
   return (
-    <Animated.View style={{ ...styles.container, opacity: fadeAnim }}>
-      <Text style={styles.title}>Bar Chart</Text>
-      <BarChart
-        data={data}
-        width={screenWidth}
-        height={220}
-        yAxisLabel="$"
-        chartConfig={{
-          backgroundColor: '#1cc910',
-          backgroundGradientFrom: '#eff3ff',
-          backgroundGradientTo: '#efefef',
-          decimalPlaces: 2,
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
-        }}
-        style={{
-          marginVertical: 8,
-          borderRadius: 16,
-        }}
-      />
-      <Text style={styles.summary}>
-        Compared to the previous month, you spent ${totalCurrentMonth - totalPreviousMonth} more.
-      </Text>
-      <Button title="Continue >>>" onPress={() => navigation.navigate('Suggestions')} />
-    </Animated.View>
+    <View style={styles.container}>
+      <Pressable style={styles.backArrow} onPress={() => navigation.goBack()}>
+        <Icon name="arrow-back" size={24} color="#007BFF" />
+      </Pressable>
+      <Text style={styles.title}>Monthly Expense Report - {month}/{year}</Text>
+      <View style={styles.chartContainer}>
+        <Text style={styles.chartTitle}>Bar Chart</Text>
+        <BarChart
+          data={barData}
+          width={screenWidth - 40}
+          height={220}
+          yAxisLabel="$"
+          chartConfig={chartConfig}
+          verticalLabelRotation={30}
+        />
+      </View>
+    </View>
   );
+};
+
+const chartConfig = {
+  backgroundGradientFrom: "#FFF",
+  backgroundGradientTo: "#FFF",
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  strokeWidth: 2,
+  barPercentage: 0.5,
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
     backgroundColor: '#fff',
+  },
+  backArrow: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 1,
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
   },
-  summary: {
-    fontSize: 16,
-    marginVertical: 20,
+  chartContainer: {
+    marginVertical: 10,
+  },
+  chartTitle: {
+    fontSize: 18,
+    marginBottom: 10,
     textAlign: 'center',
   },
 });

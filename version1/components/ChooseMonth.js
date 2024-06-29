@@ -27,7 +27,7 @@ const SelectMonthPage = () => {
 
   const handleDone = () => {
     if (selectedMonth) {
-      navigation.navigate('MonthlyExpenseReport', { year: selectedYear, month: selectedMonth });
+      navigation.navigate('PieChartPage', { year: selectedYear, month: selectedMonth });
     } else {
       alert('Please select a month');
     }

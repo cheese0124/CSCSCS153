@@ -16,17 +16,16 @@ import RecordSavingsPage from './components/RecordSavings';
 import CheckReportPage from './components/CheckReport';
 import CheckGardenPage from './components/CheckGarden';
 import SelectMonthPage from './components/ChooseMonth';
-import MonthlyExpenseReport from './components/MonthlyExpenseReport';
-
-import TotalExpenseReport from './components/TotalExpenseReport';
-import TagSelectionPage from './components/TagSelectionPage'; // Import TagSelectionPage
+import PieChartPage from './components/PieChartPage';
+import BarChartPage from './components/BarChartPage';
+import TagSelectionPage from './components/TagSelectionPage';
 import CustomTagPage from './components/CustomTagPage';
+import TotalExpenseReport from './components/TotalExpenseReport'; // Add TotalExpenseReport
 
 // Import Context Providers
 import { AccountProvider } from './components/AccountContext';
 import { ValueProvider } from './components/ValueContext';
-import { TagProvider } from './components/TagContext'; // Import TagProvider
-
+import { TagProvider } from './components/TagContext';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -86,71 +85,77 @@ function App() {
     <AccountProvider>
       <ValueProvider>
         <TagProvider>
-          <NavigationContainer>
-            <Stack.Navigator initialRouteName={initialRoute}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName={initialRoute}>
 
-              <Stack.Screen
-                name="Start"
-                component={StartScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="AccountName"
-                component={AccountNamePage}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Main"
-                component={HomeTabs}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="RecordExpense"
-                component={MoneyExpensePage}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="RecordSavings"
-                component={RecordSavingsPage}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="CheckReport"
-                component={CheckReportPage}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="CheckGarden"
-                component={CheckGardenPage}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="SelectMonthPage"
-                component={SelectMonthPage}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="TagSelectionPage" // Make sure this is included
-                component={TagSelectionPage}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="CustomTagPage" // Make sure this is included
-                component={CustomTagPage}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="MonthlyExpenseReport"
-                component={MonthlyExpenseReport}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="TotalExpense"
-                component={TotalExpenseReport}
-                options={{ headerShown: false }}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
+            <Stack.Screen
+              name="Start"
+              component={StartScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AccountName"
+              component={AccountNamePage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Main"
+              component={HomeTabs}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="RecordExpense"
+              component={MoneyExpensePage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="RecordSavings"
+              component={RecordSavingsPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CheckReport"
+              component={CheckReportPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CheckGarden"
+              component={CheckGardenPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SelectMonthPage"
+              component={SelectMonthPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+            name="TagSelectionPage"
+            component={TagSelectionPage}
+            options={{headerShown:false}}
+            />
+            <Stack.Screen
+            name="CustomTagPage"
+            component={CustomTagPage}
+            options={{headerShown:false}}
+            />
+            <Stack.Screen
+              name="PieChartPage"
+              component={PieChartPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="BarChartPage"
+              component={BarChartPage}
+              options={{ headerShown: false }}
+            />
+      
+            <Stack.Screen
+              name="TotalExpense"
+              component={TotalExpenseReport}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
         </TagProvider>
       </ValueProvider>
     </AccountProvider>
