@@ -88,12 +88,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 60,
   },
   input: {
     borderWidth: 1,
     padding: 8,
-    marginVertical: 8,
+    marginVertical: 15,
     borderRadius: 5,
   },
   button: {

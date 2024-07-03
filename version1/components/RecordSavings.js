@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'; // Import Icon
-import { useNavigation } from '@react-navigation/native'; // Use this to navigate
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
+import { GoalContext } from './GoalContext'; // Import GoalContext
 
 const RecordSavingsPage = () => {
   const navigation = useNavigation();
+  const { addGoal } = useContext(GoalContext); // Use GoalContext
   const [goal, setGoal] = useState('');
   const [date, setDate] = useState('');
   const [amount, setAmount] = useState('');
+  const [goalName, setGoalName] = useState('');
 
   const handleContinue = () => {
-    if (goal && date && amount) {
+    if (goal && date && amount && goalName) {
+      addGoal({ goal, date, amount, name: goalName });
       navigation.navigate('SavingsSuggestionsPage', { goal, date, amount });
     } else {
       alert('Please fill in all fields');
@@ -44,6 +48,13 @@ const RecordSavingsPage = () => {
         keyboardType="numeric"
         value={amount}
         onChangeText={setAmount}
+      />
+      <Text style={styles.label}>Give your goal a name</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="e.g., dream house"
+        value={goalName}
+        onChangeText={setGoalName}
       />
       <Pressable style={styles.button} onPress={handleContinue}>
         <Text style={styles.buttonText}>See Saving Suggestions</Text>

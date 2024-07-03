@@ -20,15 +20,6 @@ const CheckReportPage = ({ navigation }) => {
           <Text style={styles.buttonText}>Yearly Report</Text>
         </Pressable>
       </View>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Saving</Text>
-        <Pressable style={[styles.button, styles.savingButton]} onPress={() => navigation.navigate('MonthlySavingReport')}>
-          <Text style={styles.buttonText}>Monthly Report</Text>
-        </Pressable>
-        <Pressable style={[styles.button, styles.savingButton]} onPress={() => navigation.navigate('YearlySavingReport')}>
-          <Text style={styles.buttonText}>Yearly Report</Text>
-        </Pressable>
-      </View>
     </View>
   );
 };

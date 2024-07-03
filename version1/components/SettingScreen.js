@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, Alert } from 'react-native';
 import { AccountContext } from './AccountContext';
 import { ValueContext } from './ValueContext';
+import { GoalContext } from './GoalContext';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingScreen = () => {
   const { accountName, setAccountName } = useContext(AccountContext);
   const { setExpenses } = useContext(ValueContext);
+  const {clearGoals}=useContext(GoalContext);
   const [photoUri, setPhotoUri] = useState(null);
   const navigation = useNavigation();
 
@@ -32,10 +34,11 @@ const SettingScreen = () => {
       setAccountName('');
       setExpenses([]);
       setPhotoUri(null);
+      clearGoals();
       Alert.alert("Logged Out", "You have been logged out.");
       navigation.reset({
         index: 0,
-        routes: [{ name: 'AnimatedBegin' }],
+        routes: [{ name: 'Start' }],
       });
     } catch (error) {
       console.error('Failed to log out and clear storage', error);

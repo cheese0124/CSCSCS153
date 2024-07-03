@@ -1,38 +1,37 @@
 import React from 'react';
-import { View, Text, Pressable, Image, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Image, StyleSheet, ScrollView } from 'react-native';
 
 const HomePage = ({ navigation }) => {
   return (
-    <View style={styles.container}>
-      
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.buttonContainer}>
         <Pressable style={styles.button} onPress={() => navigation.navigate('RecordExpense')}>
           <Image source={require('../assets/expense.jpg')} style={styles.buttonImage} />
           <Text style={styles.buttonText}>Record Expense</Text>
         </Pressable>
 
-        <Pressable style={styles.button} onPress={() => navigation.navigate('RecordSavings')}>
+        <Pressable style={styles.button} onPress={() => navigation.navigate('SavingsPage')}>
           <Image source={require('../assets/saving.jpg')} style={styles.buttonImage} />
           <Text style={styles.buttonText}>Record Savings</Text>
         </Pressable>
 
         <Pressable style={styles.button} onPress={() => navigation.navigate('CheckReport')}>
           <Image source={require('../assets/report.jpg')} style={styles.buttonImage} />
-          <Text style={styles.buttonText}>Check Your Report</Text>
+          <Text style={styles.buttonText}>Check Your Expense Report</Text>
         </Pressable>
 
-        <Pressable style={styles.button} onPress={() => navigation.navigate('CheckGarden')}>
+        <Pressable style={styles.button} onPress={() => navigation.navigate('BeachScreen')}>
           <Image source={require('../assets/garden.jpg')} style={styles.buttonImage} />
-          <Text style={styles.buttonText}>Check Your Garden</Text>
+          <Text style={styles.buttonText}>Check Your Beach</Text>
         </Pressable>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -47,8 +46,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    width: '80%',
-    height: 100,
+    width: '100%',
+    height: 120,
     backgroundColor: '#007BFF',
     paddingVertical: 15,
     paddingHorizontal: 30,
@@ -58,8 +57,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonImage: {
-    width: '100%',
-    height: '100%',
+    width: '120%',
+    height: '135%',
     position: 'absolute',
     borderRadius: 10,
     opacity: 0.6, // Adjust opacity as needed

@@ -24,10 +24,22 @@ import TotalExpenseReport from './components/TotalExpenseReport'; // Add TotalEx
 import YearlyBarChartPage from './components/YearlyBarChartPage';
 import YearlyPieChartPage from './components/YearlyPieChartPage';
 import SavingsSuggestionsPage from './components/SavingsSuggestionsPage';
+import GoalPage from './components/GoalPage';
+import SavingsPage from './components/SavingsPage';
+import SavingsDetail from './components/SavingsDetail';
+import SavingsPlanList from './components/SavingsPlanList';
+import TotalSavingsReport from './components/TotalSavingsReport';
+import AppAbout from './components/AppAbout';
+import Setup from './components/Setup';
+import RankingsScreen from './components/RankingScreen';
+import BeachScreen from './components/BeachScreen';
 // Import Context Providers
 import { AccountProvider } from './components/AccountContext';
 import { ValueProvider } from './components/ValueContext';
 import { TagProvider } from './components/TagContext';
+import { GoalProvider } from './components/GoalContext';
+import SettingScreen from './components/SettingScreen';
+import ExpenseAbout from './components/ExpenseAbout';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,7 +81,7 @@ function App() {
     const checkAccountName = async () => {
       try {
         const accountName = await AsyncStorage.getItem('accountName');
-        setInitialRoute(accountName ? 'Main' : 'AnimatedBegin');
+        setInitialRoute(accountName ? 'Main' : 'StartScreen');
       } catch (error) {
         console.error('Failed to check account name from storage', error);
       }
@@ -87,9 +99,9 @@ function App() {
     <AccountProvider>
       <ValueProvider>
         <TagProvider>
+          <GoalProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName={initialRoute}>
-
             <Stack.Screen
               name="Start"
               component={StartScreen}
@@ -175,8 +187,65 @@ function App() {
               component={SavingsSuggestionsPage}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="GoalPage"
+              component={GoalPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SavingsPage"
+              component={SavingsPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SavingsDetail"
+              component={SavingsDetail}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SavingsPlanList"
+              component={SavingsPlanList}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TotalSavings"
+              component={TotalSavingsReport}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SettingScreen"
+              component={SettingScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AppAbout"
+              component={AppAbout}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Setup"
+              component={Setup}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ExpenseAbout"
+              component={ExpenseAbout}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="RankingsScreen"
+              component={RankingsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="BeachScreen"
+              component={BeachScreen}
+              options={{ headerShown: false }}
+            />
+
           </Stack.Navigator>
         </NavigationContainer>
+        </GoalProvider>
         </TagProvider>
       </ValueProvider>
     </AccountProvider>

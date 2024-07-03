@@ -1,53 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, SafeAreaView, Pressable } from 'react-native';
-import axios from 'axios';
-import { useRoute, useNavigation } from '@react-navigation/native'; // Use this to navigate
-import Icon from 'react-native-vector-icons/Ionicons'; // Import Icon
-
-// Assuming you have a way to securely store and retrieve your API key, for example using an environment variable or secure storage
-const API_KEY = 'your_openai_api_key_here';
+import { View, Text, TextInput, Button, FlatList, StyleSheet, SafeAreaView, Pressable, Alert } from 'react-native';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { differenceInWeeks, parseISO } from 'date-fns';
 
 const SavingsSuggestionsPage = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const { goal, date, amount } = route.params; // Get goal, date, and amount from route parameters
+  const { goal, date, amount } = route.params;
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [prompt, setPrompt] = useState(`Give me some savings suggestions to achieve the goal of ${goal} by ${date} with a target amount of $${amount}.`);
 
-  const getResponse = async () => {
+  useEffect(() => {
+    generateSavingsPlan();
+  }, []);
+
+  const generateSavingsPlan = () => {
+    setLoading(true);
     try {
-      const url = 'https://api.openai.com/v1/chat/completions';
-      const config = {
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + API_KEY,
-        },
-      };
+      const targetDate = parseISO(date);
+      const currentDate = new Date();
+      const weeks = differenceInWeeks(targetDate, currentDate);
+      const weeklyAmount = (amount / weeks).toFixed(2);
 
-      const msg_data = {
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.7,
-      };
+      const suggestions = Array.from({ length: weeks }, (_, index) => ({
+        week: index + 1,
+        amount: weeklyAmount
+      }));
 
-      const response = await axios.post(url, msg_data, config);
-      const result = await response.data;
+      setData(suggestions);
       setLoading(false);
-      setData(result.choices);
     } catch (error) {
       console.error(error);
-    } finally {
+      Alert.alert('Error', 'Failed to generate suggestions. Please check your input and try again.');
       setLoading(false);
     }
   };
 
-  useEffect(() => { getResponse() }, [prompt]);
-
-  const ChatResponse = ({ role, content }) => (
+  const Suggestion = ({ week, amount }) => (
     <View style={styles.responseContainer}>
-      <Text style={styles.responseText}>{content}</Text>
+      <Text style={styles.responseText}>Week {week}: Save ${amount}</Text>
     </View>
   );
 
@@ -61,14 +53,17 @@ const SavingsSuggestionsPage = () => {
       <Text style={styles.label}>When needed: {date}</Text>
       <Text style={styles.label}>Amount: ${amount}</Text>
       <Button
-        onPress={() => { setLoading(true); setData([]); getResponse(); }}
+        onPress={generateSavingsPlan}
         title={loading ? 'Loading...' : 'Get Suggestions'}
         color="#841584"
       />
+      <Pressable style={styles.button} onPress={() => navigation.navigate('SavingsPage')}>
+        <Text style={styles.buttonText}>Got it!</Text>
+      </Pressable>
       <FlatList
         data={data}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <ChatResponse {...item.message} />}
+        renderItem={({ item }) => <Suggestion {...item} />}
       />
     </SafeAreaView>
   );
@@ -103,6 +98,19 @@ const styles = StyleSheet.create({
   responseText: {
     backgroundColor: 'white',
     padding: 10,
+  },
+  button: {
+    backgroundColor: '#32CD32',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 
